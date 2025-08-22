@@ -1,10 +1,11 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
-import { Search, Filter, MapPin, Star, ShoppingCart, Heart, Eye, Zap, TrendingUp, Users, ArrowRight, Loader2, AlertTriangle } from 'lucide-react';
+import { Search, Filter, MapPin, Star, Heart, Eye, Zap, TrendingUp, Users, ArrowRight, Loader2, AlertTriangle } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useProducts } from '@/hooks/useProducts';
+import { AddToCartButton } from '@/components/cart/AddToCartButton';
 
 // Interfaz común para todos los productos
 interface EnhancedProduct {
@@ -449,10 +450,16 @@ export default function MarketplacePage() {
                     </div>
                   </div>
 
-                  <button className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2">
-                    <ShoppingCart className="h-4 w-4" />
-                    Agregar al carrito
-                  </button>
+                  <AddToCartButton 
+                    product={{
+                      id: product.id,
+                      name: product.name,
+                      price: product.price,
+                      image: product.image,
+                      store: product.store
+                    }}
+                    className="w-full py-2 px-4"
+                  />
                 </div>
               </div>
             ))}
