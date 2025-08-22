@@ -47,7 +47,7 @@ export default function NuevoProducto() {
         console.log("✅ Frontend - Producto creado:", result);
         alert('¡Producto creado exitosamente!');
         setImages([]);
-        e.currentTarget.reset();
+        if (e.currentTarget) e.currentTarget.reset();
       } else {
         const errorText = await response.text();
         console.error("❌ Frontend - Error response:", errorText);

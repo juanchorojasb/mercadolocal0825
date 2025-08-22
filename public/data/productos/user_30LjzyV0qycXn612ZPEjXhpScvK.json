@@ -1,0 +1,17 @@
+[
+  {
+    "id": "d7e69e9a-4ad9-4216-9f1a-88043417a874",
+    "name": "cafe",
+    "description": "cafe",
+    "price": 25000,
+    "category": "comida",
+    "images": [
+      "/uploads/productos/user_30LjzyV0qycXn612ZPEjXhpScvK_1755879604731_wnd58d.jpg"
+    ],
+    "isActive": true,
+    "isFeatured": false,
+    "userId": "user_30LjzyV0qycXn612ZPEjXhpScvK",
+    "createdAt": "2025-08-22T16:20:08.301Z",
+    "updatedAt": "2025-08-22T16:20:08.301Z"
+  }
+]
