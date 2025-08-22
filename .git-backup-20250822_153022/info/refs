@@ -1,0 +1,8 @@
+af8115597888598aaff342201c002d0ba53bec59	refs/heads/development
+ab9ab4b12a94ff845fb18c938759da311e8fbf21	refs/heads/feature/store-system
+a5c962c6bc3b3ef3dcd57a0c81737fb3588b8952	refs/heads/fix/clerk-v5-compatibility-0728_1610
+2fb332d1143b2bf881ebe6db030326548489b563	refs/heads/main
+b3ff93aedf254427f0634ff685fbdd09bbb87bcb	refs/heads/staging
+ec3b0d8d0dbbb452f7ac4f93a5025fa2aa7ae1c3	refs/remotes/origin/HEAD
+ecbc58f4106acc6a5f780d2747852965109adfc0	refs/remotes/origin/development
+ec3b0d8d0dbbb452f7ac4f93a5025fa2aa7ae1c3	refs/remotes/origin/main

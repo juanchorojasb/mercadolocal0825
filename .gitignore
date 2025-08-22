@@ -1,0 +1,60 @@
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+
+# Production
+/build
+/.next/
+/out/
+
+# Environment variables - CRÍTICO
+.env*
+*.env*
+.env.backup*
+.env.production*
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Backups que pueden contener claves
+backup_*.sql
+*.backup
+*_backup.*
+complete_backup.sh
+
+# Archivos sensibles
+*.key
+*.pem
+sensitive_files/
+secrets/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Database
+*.db
+*.sqlite

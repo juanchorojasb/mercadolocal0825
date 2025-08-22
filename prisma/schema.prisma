@@ -1,0 +1,560 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  email     String   @unique
+  firstName String?
+  lastName  String?
+  avatar    String?
+  phone     String?
+  address   String?
+  city      String?
+  state     String?
+  zipCode   String?
+  country   String?  @default("Colombia")
+  birthDate DateTime?
+  gender    String?
+  occupation String?
+  bio       String?  @db.Text
+  website   String?
+  socialLinks Json?
+  preferences Json?
+  isActive  Boolean  @default(true)
+  timezone    String?
+  language    String     @default("es")
+  instructorCourses Course[]         @relation("InstructorCourses")
+  enrollments      Enrollment[]
+  lessonProgress   LessonProgress[]
+  courseReviews    CourseReview[]
+  stores           Store[]          @relation("StoreOwner")
+  subscriptions    UserSubscription[]
+  videoAnalytics   VideoAnalytics[]
+  achievements     UserAchievement[]
+  studyStreak      StudyStreak?
+  sessionActivities SessionActivity[]
+  certificates     Certificate[]
+  emailNotifications    Boolean @default(true)
+  pushNotifications     Boolean @default(true)
+  marketingEmails       Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Store {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?   @db.Text
+  logo        String?
+  banner      String?
+  category    String?
+  address     String?
+  city        String?
+  state       String?
+  zipCode     String?
+  phone       String?
+  email       String?
+  website     String?
+  socialLinks Json?
+  isActive    Boolean   @default(true)
+  isVerified  Boolean   @default(false)
+  rating      Float     @default(0)
+  reviewCount Int       @default(0)
+  productCount Int      @default(0)
+  followers   Int       @default(0)
+  ownerId     String
+  owner       User      @relation("StoreOwner", fields: [ownerId], references: [id])
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("stores")
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String
+  description String?  @db.Text
+  price       Float
+  comparePrice Float?
+  cost        Float?
+  sku         String?
+  barcode     String?
+  trackQuantity Boolean @default(true)
+  quantity    Int      @default(0)
+  weight      Float?
+  images      String[]
+  category    String?
+  tags        String[]
+  isActive    Boolean  @default(true)
+  isFeatured  Boolean  @default(false)
+  storeId     String
+  store       Store    @relation(fields: [storeId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([storeId, slug])
+  @@map("products")
+}
+
+model UserSubscription {
+  id                String   @id @default(cuid())
+  type              String   // 'programa', 'premium', etc.
+  status            String   @default("active")
+  startDate         DateTime @default(now())
+  endDate           DateTime?
+  autoRenew         Boolean  @default(false)
+  paymentMethod     String?
+  amount            Float?
+  currency          String   @default("COP")
+  billingInterval   String?  // 'monthly', 'yearly'
+  metadata          Json?
+  userId            String
+  user              User     @relation(fields: [userId], references: [id])
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@map("user_subscriptions")
+}
+
+model Course {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  slug        String   @unique
+  thumbnail   String?
+  price       Float    @default(0)
+  duration    String?  // "4 semanas", "10 horas", etc.
+  level       Level    @default(BEGINNER)
+  status      CourseStatus @default(DRAFT)
+  tags        String[]
+  language    String   @default("es")
+  instructorId String
+  instructor  User     @relation("InstructorCourses", fields: [instructorId], references: [id])
+  lessons     Lesson[]
+  enrollments Enrollment[]
+  reviews     CourseReview[]
+  sessionActivities SessionActivity[]
+  certificates Certificate[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  publishedAt DateTime?
+
+  @@map("courses")
+}
+
+model Lesson {
+  id               String   @id @default(cuid())
+  title            String
+  description      String?  @db.Text
+  slug             String
+  order            Int      @default(0)
+  duration         Int?     // duración en segundos
+  bunnyVideoId     String?  // ID del video en Bunny Stream
+  bunnyLibraryId   String?  // Library ID de Bunny Stream
+  bunnyThumbnail   String?  // URL del thumbnail
+  bunnyPlaybackUrl String?  // URL de reproducción
+  content          String?  @db.Text
+  resources        Json?    // recursos adicionales (PDFs, links, etc.)
+  isPreview        Boolean @default(false)
+  isRequired       Boolean @default(true)
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  progress LessonProgress[]
+  videoAnalytics   VideoAnalytics[]
+  sessionActivities SessionActivity[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@unique([courseId, slug])
+  @@map("lessons")
+}
+
+model Enrollment {
+  id       String @id @default(cuid())
+  status   EnrollmentStatus @default(ACTIVE)
+  progress Float  @default(0) // 0-100
+  userId   String
+  user     User   @relation(fields: [userId], references: [id])
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+  enrolledAt DateTime @default(now())
+  completedAt DateTime?
+
+  @@unique([userId, courseId])
+  @@map("enrollments")
+}
+
+model LessonProgress {
+  id             String @id @default(cuid())
+  progress       Float @default(0)
+  watchedSeconds Int @default(0)
+  isCompleted    Boolean @default(false)
+  lastPosition   Int @default(0)
+  userId   String
+  user     User @relation(fields: [userId], references: [id])
+  lessonId String
+  lesson   Lesson @relation(fields: [lessonId], references: [id])
+  startedAt   DateTime @default(now())
+  completedAt DateTime?
+  updatedAt   DateTime @updatedAt
+  @@unique([userId, lessonId])
+  @@map("lesson_progress")
+}
+
+model CourseReview {
+  id      String @id @default(cuid())
+  rating  Int
+  comment String? @db.Text
+  userId   String
+  user     User @relation(fields: [userId], references: [id])
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, courseId])
+  @@map("course_reviews")
+}
+
+model VideoAnalytics {
+  id                String   @id @default(cuid())
+  // Métricas básicas
+  totalWatchTime    Int      @default(0) // en segundos
+  percentageWatched Float    @default(0) // 0-100
+  completionRate    Float    @default(0) // 0-100
+  
+  // Métricas de engagement
+  pauseCount        Int      @default(0)
+  seekCount         Int      @default(0)
+  qualityChanges    Int      @default(0)
+  speedChanges      Int      @default(0)
+  replayCount       Int      @default(0)
+  
+  // Patrones de visualización
+  averageSessionTime    Int    @default(0)
+  peakEngagementTime    Int    @default(0) // segundo con mayor engagement
+  dropOffPoints         Json   @default("[]") // puntos donde el usuario pausó/salió
+  engagementHeatmap     Json   @default("{}") // mapa de calor de interacciones
+  
+  // Configuraciones usadas
+  preferredQuality      String @default("auto")
+  preferredSpeed        Float  @default(1.0)
+  averageVolume         Float  @default(1.0)
+  fullscreenUsage       Int    @default(0) // veces que usó pantalla completa
+  
+  // Dispositivo y contexto
+  deviceType            String? // mobile, desktop, tablet
+  browserInfo           String?
+  screenResolution      String?
+  connectionSpeed       String? // slow, fast, unknown
+  
+  // Relaciones
+  userId     String
+  user       User   @relation(fields: [userId], references: [id])
+  lessonId   String
+  lesson     Lesson @relation(fields: [lessonId], references: [id])
+  
+  // Timestamps
+  sessionStart  DateTime @default(now())
+  lastActivity  DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  @@unique([userId, lessonId])
+  @@map("video_analytics")
+}
+
+model UserAchievement {
+  id            String @id @default(cuid())
+  achievementId String
+  achievement   Achievement @relation(fields: [achievementId], references: [id])
+  userId        String
+  user          User @relation(fields: [userId], references: [id])
+  
+  // Progreso del logro
+  progress      Float    @default(0) // 0-100
+  isCompleted   Boolean  @default(false)
+  
+  // Metadatos
+  unlockedAt    DateTime?
+  notifiedAt    DateTime?
+  createdAt     DateTime @default(now())
+  
+  @@unique([userId, achievementId])
+  @@map("user_achievements")
+}
+
+model Achievement {
+  id          String @id @default(cuid())
+  title       String
+  description String
+  icon        String // emoji o nombre de icono
+  category    AchievementCategory
+  
+  // Configuración del logro
+  targetValue    Int    @default(1) // valor objetivo para completar
+  isHidden       Boolean @default(false) // logro secreto
+  difficulty     AchievementDifficulty @default(EASY)
+  points         Int    @default(10) // puntos que otorga
+  
+  // Condiciones
+  condition      Json   // condiciones para desbloquear
+  prerequisites  String[] // IDs de logros requeridos
+  
+  // Metadatos
+  isActive       Boolean @default(true)
+  order          Int     @default(0)
+  createdAt      DateTime @default(now())
+  
+  // Relaciones
+  userAchievements UserAchievement[]
+  
+  @@map("achievements")
+}
+
+model StudyStreak {
+  id            String @id @default(cuid())
+  userId        String
+  user          User   @relation(fields: [userId], references: [id])
+  
+  // Racha actual
+  currentStreak      Int      @default(0) // días consecutivos
+  longestStreak      Int      @default(0) // récord personal
+  lastStudyDate      DateTime?
+  
+  // Estadísticas
+  totalStudyDays     Int      @default(0) // días totales estudiados
+  totalStudyTime     Int      @default(0) // tiempo total en segundos
+  averageSessionTime Int      @default(0) // tiempo promedio por sesión
+  
+  // Metas
+  dailyGoalMinutes   Int      @default(30) // meta diaria en minutos
+  weeklyGoalDays     Int      @default(5)  // meta semanal en días
+  
+  // Estado actual
+  todayStudyTime     Int      @default(0) // tiempo estudiado hoy
+  weekStudyDays      Int      @default(0) // días estudiados esta semana
+  isGoalMet          Boolean  @default(false) // si cumplió la meta de hoy
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@unique([userId])
+  @@map("study_streaks")
+}
+
+model SessionActivity {
+  id               String @id @default(cuid())
+  userId           String
+  user             User   @relation(fields: [userId], references: [id])
+  lessonId         String?
+  lesson           Lesson? @relation(fields: [lessonId], references: [id])
+  courseId         String?
+  course           Course? @relation(fields: [courseId], references: [id])
+  
+  // Tipo de actividad
+  activityType     ActivityType
+  
+  // Duración y progreso
+  duration         Int      @default(0) // duración en segundos
+  progress         Float    @default(0) // progreso específico de la actividad
+  
+  // Metadatos de la sesión
+  deviceInfo       Json     @default("{}")
+  location         String?  // geolocalización general
+  metadata         Json     @default("{}") // datos adicionales específicos
+  
+  // Timestamps
+  startedAt        DateTime @default(now())
+  endedAt          DateTime?
+  createdAt        DateTime @default(now())
+  
+  @@map("session_activities")
+}
+
+model Certificate {
+  id               String   @id @default(cuid())
+  certificateCode  String   @unique // Código único verificable
+  
+  // Información del certificado
+  title            String   // "Certificado de Completación - IA para Emprendedores"
+  description      String?  @db.Text
+  issueDate        DateTime @default(now())
+  validUntil       DateTime? // Para certificados con vencimiento
+  
+  // Métricas de completación
+  totalHours       Int      @default(0) // Horas totales del curso
+  completionRate   Float    @default(100) // Porcentaje de completación
+  finalScore       Int?     // Puntuación final si hay evaluaciones
+  
+  // Template y diseño
+  templateId       String   @default("default")
+  customData       Json?    // Datos adicionales del certificado
+  
+  // Archivos generados
+  pdfUrl           String?  // URL del PDF generado
+  imageUrl         String?  // URL de imagen del certificado
+  
+  // Estado del certificado
+  status           CertificateStatus @default(ACTIVE)
+  isVerified       Boolean  @default(true)
+  
+  // Metadatos
+  issuerName       String   @default("Academia Mercado Local Caldas")
+  issuerLogo       String?
+  signatureImage   String?
+  
+  // Relaciones
+  userId           String
+  user             User     @relation(fields: [userId], references: [id])
+  courseId         String?
+  course           Course?  @relation(fields: [courseId], references: [id])
+  
+  // Verificación y compartir
+  shareableLink    String?  // Link público para compartir
+  verificationHash String?  // Hash para verificar autenticidad
+  downloadCount    Int      @default(0)
+  sharedCount      Int      @default(0)
+  
+  // Verificaciones
+  verifications    CertificateVerification[]
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  
+  @@map("certificates")
+}
+
+model CertificateTemplate {
+  id              String   @id @default(cuid())
+  name            String   // "Template Clásico", "Template Moderno"
+  description     String?
+  
+  // Configuración del diseño
+  layout          CertificateLayout @default(LANDSCAPE)
+  colorScheme     String   @default("#1e40af,#3b82f6,#60a5fa") // Colores principales
+  fontFamily      String   @default("Inter")
+  backgroundImage String?  // URL de imagen de fondo
+  
+  // Elementos del template
+  showLogo        Boolean  @default(true)
+  showSignature   Boolean  @default(true)
+  showQRCode      Boolean  @default(true)
+  showBorder      Boolean  @default(true)
+  
+  // Posicionamiento de elementos
+  titlePosition   Json     @default("{\"x\": 50, \"y\": 30}")
+  logoPosition    Json     @default("{\"x\": 10, \"y\": 10}")
+  textAlignment   String   @default("center")
+  
+  // Template HTML/CSS para generación
+  htmlTemplate    String?  @db.Text
+  cssStyles       String?  @db.Text
+  
+  // Estado y configuración
+  isActive        Boolean  @default(true)
+  isDefault       Boolean  @default(false)
+  category        TemplateCategory @default(COURSE)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@map("certificate_templates")
+}
+
+model CertificateVerification {
+  id               String   @id @default(cuid())
+  certificateId    String
+  certificate      Certificate @relation(fields: [certificateId], references: [id])
+  
+  // Datos de verificación
+  verifierIP       String?
+  verifierLocation String?
+  verificationDate DateTime @default(now())
+  userAgent        String?
+  
+  // Resultado de verificación
+  isValid          Boolean  @default(true)
+  verificationCode String   @unique
+  
+  @@map("certificate_verifications")
+}
+
+enum Level {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum CourseStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+  EXPIRED
+}
+
+enum AchievementCategory {
+  LEARNING      // logros de aprendizaje
+  ENGAGEMENT    // logros de participación
+  COMPLETION    // logros de completación
+  SOCIAL        // logros sociales
+  SPECIAL       // logros especiales
+}
+
+enum AchievementDifficulty {
+  EASY
+  MEDIUM
+  HARD
+  LEGENDARY
+}
+
+enum ActivityType {
+  VIDEO_WATCH       // viendo video
+  LESSON_COMPLETE   // completó lección
+  COURSE_START      // inició curso
+  COURSE_COMPLETE   // completó curso
+  DOWNLOAD_RESOURCE // descargó recurso
+  QUIZ_ATTEMPT      // intentó quiz
+  FORUM_POST        // publicó en foro
+  PEER_INTERACTION  // interacción con compañeros
+}
+
+enum CertificateStatus {
+  ACTIVE
+  REVOKED
+  EXPIRED
+  PENDING
+}
+
+enum CertificateLayout {
+  LANDSCAPE
+  PORTRAIT
+  SQUARE
+}
+
+enum TemplateCategory {
+  COURSE       // Certificados de curso
+  ACHIEVEMENT  // Certificados de logros
+  PARTICIPATION // Certificados de participación
+  SKILL        // Certificados de habilidades
+  CUSTOM       // Templates personalizados
+}

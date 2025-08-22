@@ -1,0 +1,136 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ====================================
+// MODELO DE USUARIO
+// ====================================
+model User {
+  id        String  @id @default(cuid())
+  clerkId   String  @unique
+  email     String  @unique
+  firstName String?
+  lastName  String?
+
+  // Información adicional del formulario optimizado
+  telefono      String?
+  municipio     String?
+  nombreNegocio String?
+  nombreTienda  String? // Para generar slug de tienda
+  etapa         String?
+  sector        String?
+  desafios      String?
+  objetivos     String?
+
+  // Información opcional del formulario
+  historia          String?
+  sitioWeb          String?
+  redesSociales     String?
+  tiempoExperiencia String?
+  empleados         String?
+
+  // Relaciones
+  store         Store? // Un usuario puede tener una tienda
+  products      Product[] // Un usuario puede tener múltiples productos
+  subscriptions UserSubscription[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ====================================
+// MODELO DE TIENDA
+// ====================================
+model Store {
+  id          String  @id @default(cuid())
+  slug        String  @unique // URL amigable: /tienda/cafe-del-bosque
+  name        String // Nombre de la tienda
+  description String? // Descripción de la tienda
+  logo        String? // URL del logo
+  banner      String? // URL del banner
+
+  // Información de contacto
+  email   String?
+  phone   String?
+  website String?
+
+  // Ubicación
+  address    String?
+  city       String?
+  department String  @default("Caldas")
+
+  // Redes sociales
+  facebook  String?
+  instagram String?
+  whatsapp  String?
+
+  // Configuración
+  isActive   Boolean @default(true)
+  isVerified Boolean @default(false) // Verificación del admin
+
+  // Relaciones
+  userId   String    @unique // Un usuario = una tienda
+  user     User      @relation(fields: [userId], references: [id])
+  products Product[] // Una tienda puede tener múltiples productos
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ====================================
+// MODELO DE PRODUCTO
+// ====================================
+model Product {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  price       Decimal
+  category    String?
+  images      String? @db.Text // JSON string con URLs de imágenes - compatible con MySQL
+  isActive    Boolean @default(true)
+  isFeatured  Boolean @default(false) // Para productos destacados
+
+  // Relaciones
+  // Relación con usuario (vendedor)
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  // Relación con tienda (opcional - un producto puede estar en una tienda)
+  storeId String?
+  store   Store?  @relation(fields: [storeId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ====================================
+// MODELO DE SUSCRIPCIÓN
+// ====================================
+model UserSubscription {
+  id            String  @id @default(cuid())
+  userId        String
+  plan          String // "A", "B", "C"
+  status        String  @default("pending") // "pending", "active", "cancelled"
+  amount        Decimal
+  paymentMethod String // "nequi", "bancolombia", "daviplata"
+
+  // Información de pago
+  paymentProof String? // URL del comprobante
+  adminNotes   String? // Notas del administrador
+
+  user User @relation(fields: [userId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Agregar a modelo User:
+// onboardingCompleted Boolean @default(false)
