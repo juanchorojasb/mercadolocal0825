@@ -5,6 +5,7 @@ const isPublicRoute = createRouteMatcher([
   '/',
   '/sign-in(.*)',
   '/sign-up(.*)',
+  '/api/webhooks/(.*)',  // Allow all webhook routes
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
@@ -13,14 +14,14 @@ export default clerkMiddleware(async (auth, req) => {
   if (isPublicRoute(req)) {
     return NextResponse.next();
   }
-
+  
   const { userId } = await auth();
-
+  
   if (!userId) {
     const signInUrl = new URL('/sign-in', nextUrl.origin);
     return NextResponse.redirect(signInUrl);
   }
-
+  
   return NextResponse.next();
 });
 
