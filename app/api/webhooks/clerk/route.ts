@@ -1,17 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { WebhookEvent } from '@clerk/nextjs/server'
-import { headers } from 'next/headers'
 import { Webhook } from 'svix'
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
 export async function POST(req: NextRequest) {
-  // Get the headers
-  const headerPayload = headers()
-  const svix_id = headerPayload.get('svix-id')
-  const svix_timestamp = headerPayload.get('svix-timestamp')
-  const svix_signature = headerPayload.get('svix-signature')
+  // Get the headers directly from request
+  const svix_id = req.headers.get('svix-id')
+  const svix_timestamp = req.headers.get('svix-timestamp')
+  const svix_signature = req.headers.get('svix-signature')
 
   // If there are no headers, error out
   if (!svix_id || !svix_timestamp || !svix_signature) {
@@ -22,7 +20,6 @@ export async function POST(req: NextRequest) {
 
   // Get the body
   const payload = await req.text()
-  const body = JSON.parse(payload)
 
   // Create a new Svix instance with your webhook secret
   const wh = new Webhook(process.env.CLERK_WEBHOOK_SECRET || '')
