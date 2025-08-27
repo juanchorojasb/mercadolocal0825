@@ -15,7 +15,7 @@ export default function HomePage() {
           <div className="flex items-center justify-center text-center">
             <AlertTriangle className="h-5 w-5 mr-2 animate-pulse" />
             <span className="font-bold text-sm sm:text-base">
-              🔥 ÚLTIMOS DÍAS: Inscripciones hasta el domingo 24 • Inicio: lunes 25
+              🔥 ÚLTIMOS DÍAS: Inscripciones hasta el martes 3 septiembre • Inicio: martes 27 agosto
             </span>
             <Clock className="h-5 w-5 ml-2 animate-pulse" />
           </div>

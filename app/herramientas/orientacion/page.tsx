@@ -122,7 +122,7 @@ export default function OrientacionPage() {
               <div className="space-y-2 text-sm">
                 <div>
                   <strong>Inscripciones:</strong>
-                  <br />Hasta el domingo 24
+                  <br />Hasta el martes 3 septiembre
                 </div>
                 <div>
                   <strong>Entrevistas:</strong>
@@ -130,7 +130,7 @@ export default function OrientacionPage() {
                 </div>
                 <div>
                   <strong>Inicio programa:</strong>
-                  <br />lunes 25
+                  <br />martes 27 agosto
                 </div>
               </div>
             </div>

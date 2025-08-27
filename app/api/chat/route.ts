@@ -31,9 +31,9 @@ function getOrientacionResponse(message: string): string {
   if (lowerMessage.includes('fecha') || lowerMessage.includes('cuando')) {
     return `📅 **Fechas importantes del programa Norte de Caldas:**
 
-- **Inscripciones:** Hasta el domingo 24
+- **Inscripciones:** Hasta el martes 3 septiembre
 - **Entrevistas:** 9, 10 y 11 de agosto de 2025  
-- **Inicio del programa:** lunes 25
+- **Inicio del programa:** martes 27 agosto
 - **Duración:** 2 meses de acompañamiento
 
 ¿Necesitas información sobre alguna fecha específica?`;
