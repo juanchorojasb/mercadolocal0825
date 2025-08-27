@@ -52,6 +52,72 @@ export default function DashboardPage() {
         </div>
       </header>
 
+      {/* Banner Sesión en Vivo */}
+      <div className="bg-gradient-to-r from-red-600 via-orange-600 to-red-700 shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+            <div className="flex items-center space-x-4">
+              <div className="relative">
+                <div className="w-4 h-4 bg-red-500 rounded-full animate-pulse"></div>
+                <div className="absolute inset-0 w-4 h-4 bg-red-400 rounded-full animate-ping"></div>
+              </div>
+              <div className="text-white">
+                <h2 className="text-lg sm:text-xl font-bold flex items-center">
+                  🔴 EN VIVO HOY
+                  <span className="ml-2 text-xs bg-white/20 px-2 py-1 rounded-full">
+                    7:00 PM
+                  </span>
+                </h2>
+                <p className="text-white/90 text-sm">
+                  <strong>Transformación Digital Norte de Caldas</strong>
+                </p>
+                <p className="text-white/80 text-xs">
+                  Miércoles, 27 de agosto • 7:00 – 8:30pm
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-3">
+              <a 
+                href="https://meet.google.com/frx-deap-ixi" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="bg-white text-red-600 hover:bg-red-50 font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 animate-pulse"
+              >
+                🚀 UNIRSE AHORA
+              </a>
+              
+              <div className="sm:hidden text-center">
+                <p className="text-white/80 text-xs">
+                  📞 Teléfono: +593 95 866 6050
+                </p>
+                <p className="text-white/80 text-xs">
+                  PIN: 312 459 368 0812
+                </p>
+              </div>
+              
+              <div className="hidden sm:block text-right">
+                <p className="text-white/90 text-sm font-medium">
+                  📞 Respaldo telefónico:
+                </p>
+                <p className="text-white/80 text-xs">
+                  +593 95 866 6050
+                </p>
+                <p className="text-white/80 text-xs">
+                  PIN: 312 459 368 0812
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="text-center mt-3">
+            <p className="text-white/90 text-sm">
+              ⚡ Primera sesión del programa - ¡No te la pierdas! ⚡
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {isProgramaGratuito ? (
           /* Dashboard para Programa de Formación */
