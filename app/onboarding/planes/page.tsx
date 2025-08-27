@@ -59,7 +59,7 @@ const planes = [
     precioOriginal: 8500000,
     descripcion: 'Programa especial GRATUITO para el Norte de Caldas',
     caracteristicas: [
-      '6 meses de formación integral',
+      '2 meses de formación integral',
       'Academia IA especializada',
       'Mentorías personalizadas',
       'Tienda online incluida',

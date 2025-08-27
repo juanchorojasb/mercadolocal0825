@@ -180,7 +180,7 @@ export default function PlanesPage() {
             <ul className="space-y-3 mb-6">
               <li className="flex items-center text-sm">
                 <Check className="h-4 w-4 text-yellow-300 mr-2 flex-shrink-0" />
-                6 meses de formación integral
+                2 meses de formación integral
               </li>
               <li className="flex items-center text-sm">
                 <Check className="h-4 w-4 text-yellow-300 mr-2 flex-shrink-0" />

@@ -12,7 +12,7 @@ export default function Nivel1Page() {
       {
         id: 1,
         title: "Mentalidad Emprendedora",
-        date: "Lunes 25 de Agosto",
+        date: "Martes 27 de agosto",
         time: "7:00 PM - 9:00 PM",
         status: "available",
         topics: [

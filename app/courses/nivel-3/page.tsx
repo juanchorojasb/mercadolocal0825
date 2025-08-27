@@ -74,7 +74,7 @@ export default function Nivel3Page() {
       resources: [
         "Template Presentación E-commerce",
         "Certificado Digital",
-        "Plan Escalamiento 6 meses"
+        "Plan Escalamiento 2 meses"
       ],
       status: "coming-soon"
     }

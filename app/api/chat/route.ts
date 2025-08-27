@@ -34,7 +34,7 @@ function getOrientacionResponse(message: string): string {
 - **Inscripciones:** Hasta el domingo 24
 - **Entrevistas:** 9, 10 y 11 de agosto de 2025  
 - **Inicio del programa:** lunes 25
-- **Duración:** 6 meses de acompañamiento
+- **Duración:** 2 meses de acompañamiento
 
 ¿Necesitas información sobre alguna fecha específica?`;
   }

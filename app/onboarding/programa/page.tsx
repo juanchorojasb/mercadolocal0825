@@ -133,7 +133,7 @@ export default function ProgramaPage() {
                 <div className="text-center bg-gray-50 rounded-lg p-6">
                   <Clock className="w-12 h-12 text-blue-600 mx-auto mb-3" />
                   <h3 className="font-semibold text-gray-900 mb-2">Duración</h3>
-                  <p className="text-gray-600">6 meses intensivos</p>
+                  <p className="text-gray-600">2 meses intensivos</p>
                   <p className="text-sm text-gray-500">Enero - Junio 2025</p>
                 </div>
                 <div className="text-center bg-gray-50 rounded-lg p-6">
@@ -377,7 +377,7 @@ export default function ProgramaPage() {
                 className="mt-1 mr-3 h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
               />
               <label htmlFor="compromiso" className="text-sm text-gray-700">
-                <strong>Me comprometo a:</strong> Participar activamente en el programa por 6 meses, 
+                <strong>Me comprometo a:</strong> Participar activamente en el programa por 2 meses, 
                 asistir a las sesiones programadas, implementar los aprendizajes en mi emprendimiento 
                 y contribuir al fortalecimiento del ecosistema emprendedor del Norte de Caldas.
               </label>

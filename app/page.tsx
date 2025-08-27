@@ -51,11 +51,11 @@ export default function HomePage() {
               <div className="bg-white rounded-lg shadow-lg p-4 mb-6 border-l-4 border-red-500">
                 <div className="grid grid-cols-2 gap-4 text-center">
                   <div>
-                    <div className="text-lg font-bold text-red-600">24 de Agosto</div>
+                    <div className="text-lg font-bold text-red-600">3 de septiembre</div>
                     <div className="text-xs text-gray-600">Cierre inscripciones</div>
                   </div>
                   <div>
-                    <div className="text-lg font-bold text-green-600">25 de Agosto</div>
+                    <div className="text-lg font-bold text-green-600">27 de agosto</div>
                     <div className="text-xs text-gray-600">Inicio programa</div>
                   </div>
                 </div>
@@ -281,7 +281,7 @@ export default function HomePage() {
           </p>
           <Link href="/sign-up">
             <Button size="lg" className="bg-red-600 hover:bg-red-700 text-white px-8 py-3 text-lg font-semibold shadow-lg animate-pulse">
-              🚨 Inscribirme Antes del 24 de Agosto
+              🚨 Inscribirme Antes del 3 de septiembre
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </Link>
